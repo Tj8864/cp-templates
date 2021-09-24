@@ -1,0 +1,16 @@
+{
+    "spf": {
+        "prefix": "spf",
+        "body": [
+            "rep(i,0,${0:200001}) spf[i] = i;",
+            "for(int i=2;i*i<${0:200001};i++){",
+            "    if(spf[i] == i){",
+            "        for(int j=i*i;j<${0:200001};j+=i){",
+            "            if(spf[j]==j) spf[j] = i;",
+            "        }",
+            "    }",
+            "}"
+        ],
+        "description": "spf"
+    }
+}

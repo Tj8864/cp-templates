@@ -1,0 +1,19 @@
+{
+    "binexp": {
+        "prefix": "binexp",
+        "body": [
+            "long long binExp(long long a,long long b,long long modulo)",
+            "{",
+            "    long long prod = a;",
+            "    long long ans = 1;",
+            "    while(b){",
+            "        if(b%2) ans = (ans*prod)%modulo;",
+            "        b /= 2;",
+            "        prod = (prod*prod)%modulo;",
+            "    }",
+            "    return ans;",
+            "}"
+        ],
+        "description": "binexp"
+    }
+}

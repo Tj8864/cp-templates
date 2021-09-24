@@ -1,0 +1,36 @@
+{
+    "Lowest Common Ancestor": {
+        "prefix": "lca",
+        "body": [
+            "vvi parent;",
+            "vi depth;",
+            "int mxN;",
+            "",
+            "void dfs(int src, int par, vi *adj, int dep=0){",
+            "    depth[src] = dep;",
+            "    parent[src][0] = par;",
+            "    for(int i=1;i<mxN;i++){",
+            "        parent[src][i] = parent[parent[src][i-1]][i-1];",
+            "    }",
+            "    for(auto i:adj[src]){",
+            "        if(i == par) continue;",
+            "        dfs(i,src,adj,dep+1);",
+            "    }",
+            "}",
+            "",
+            "auto lca = [](int u, int v){",
+            "    if(depth[u] < depth[v]) swap(u,v);",
+            "    drep(i,mxN,0) if(depth[u]-(1<<i) >= depth[v]) u = parent[u][i];",
+            "    if(u == v) return v;",
+            "    drep(i,mxN-1,0) {",
+            "        if(parent[u][i] != parent[v][i]){",
+            "            u = parent[u][i];",
+            "            v = parent[v][i];",
+            "        }",
+            "    }",
+            "    return parent[u][0];",
+            "};"
+        ],
+        "description": "lca"
+    }
+}
