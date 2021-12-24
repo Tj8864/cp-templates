@@ -93,9 +93,152 @@ istream &operator>>(istream &in, __int128_t &x){x=0;string num;cin >> num;for(ch
 template <typename... T>void read(T &...args){((cin >> args), ...);}
 template <typename... T>void print(T... args){((cout << args << " "), ...);cout << endl;}
 
+template<long long modulo>
+struct matrix{
+    vector<vector<long long>> mat;
+    int row, col;
+    matrix(long long _row, long long _col){
+        row = _row, col = _col;
+        mat.assign(row, vector<long long>(col,0));
+    }
+    vector<long long> &operator[](long long r){
+        if(r >= mat.size()) throw;
+        return mat[r];
+    }
+
+    matrix operator*(matrix &m){
+        if(m.row != this->col){
+            throw;
+        }
+        matrix res(this->row, m.col);
+        for(int i=0;i<this->row;i++){
+            for(int j=0;j<m.col;j++){
+                for(int k=0;k<m.row;k++){
+                    res[i][j] = (res[i][j] + (((*this)[i][k])*m[k][j])%modulo)%modulo;
+                }
+            }
+        }
+        return res;
+    }
+
+    vector<vector<long long>>::iterator begin(){
+        return mat.begin();
+    }
+
+    vector<vector<long long>>::iterator end(){
+        return mat.end();
+    }
+
+    void operator=(matrix m){
+        this->mat = m.mat;
+        this->row = m.row;
+        this->col = m.col;
+    }
+};
+
+template<long long modulo>
+matrix<modulo> identity(int sz){
+    matrix<modulo> res(sz,sz);
+    for(int i=0;i<sz;i++){
+        res[i][i] = 1;
+    }
+    return res;
+}
+
+template<long long modulo> ostream &operator<<(ostream &ost, matrix<modulo> m){for(auto &i:m){for(auto &j:i) ost << j << " ";ost << endl;}return ost;}
+template<long long modulo> istream &operator>>(istream &ist, matrix<modulo> &m){for(auto &i:m)for(auto &j:i) ist>>j;return ist;}
+
+
+template<long long modulo>
+matrix<modulo> matrixExpo(matrix<modulo> &m, long long power){
+    if(m.row != m.col) throw;
+    matrix<modulo> res = identity<modulo>(m.row);
+    auto prod = m;
+    while(power){
+        if((power&1)) res = res*prod;
+        prod = (prod*prod);
+        power /= 2;
+    }
+    return res;
+}
+
+
+// struct matrix{
+//     vector<vector<double>> mat;
+//     int row, col;
+//     matrix(long long _row, long long _col){
+//         row = _row, col = _col;
+//         mat.assign(row, vector<double>(col,0));
+//     }
+//     vector<double> &operator[](long long r){
+//         if(r >= mat.size()) throw;
+//         return mat[r];
+//     }
+
+//     matrix operator*(matrix &m){
+//         if(m.row != this->col){
+//             throw;
+//         }
+//         matrix res(this->row, m.col);
+//         for(int i=0;i<this->row;i++){
+//             for(int j=0;j<m.col;j++){
+//                 for(int k=0;k<m.row;k++){
+//                     res[i][j] += (((*this)[i][k])*m[k][j]);
+//                 }
+//             }
+//         }
+//         return res;
+//     }
+
+//     vector<vector<double>>::iterator begin(){
+//         return mat.begin();
+//     }
+
+//     vector<vector<double>>::iterator end(){
+//         return mat.end();
+//     }
+
+//     void operator=(matrix m){
+//         this->mat = m.mat;
+//         this->row = m.row;
+//         this->col = m.col;
+//     }
+// };
+
+// matrix identity(int sz){
+//     matrix res(sz,sz);
+//     for(int i=0;i<sz;i++){
+//         res[i][i] = 1;
+//     }
+//     return res;
+// }
+// ostream &operator<<(ostream &ost, matrix m){for(auto &i:m){for(auto &j:i) ost << j << " ";ost << endl;}return ost;}
+// istream &operator>>(istream &ist, matrix &m){for(auto &i:m)for(auto &j:i) ist>>j;return ist;}
+
+
+// matrix matrixExpo(matrix &m, long long power){
+//     if(m.row != m.col) throw;
+//     matrix res = identity(m.row);
+//     auto prod = m;
+//     while(power){
+//         if((power&1)) res = res*prod;
+//         prod = (prod*prod);
+//         power /= 2;
+//     }
+//     return res;
+// }
+
+
 void solve()
 {
-    
+    matrix<mod> base(2,1);
+    base.mat = {{1},{0}};
+    matrix<mod> mat(2,2);
+    mat.mat = {{1,1},{1,0}};
+    int n;
+    cin >> n;
+    mat = matrixExpo<mod>(mat, n);
+    cout << (mat*base)[0][0] << endl;
 }
 
 signed main()

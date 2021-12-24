@@ -93,9 +93,39 @@ istream &operator>>(istream &in, __int128_t &x){x=0;string num;cin >> num;for(ch
 template <typename... T>void read(T &...args){((cin >> args), ...);}
 template <typename... T>void print(T... args){((cout << args << " "), ...);cout << endl;}
 
+class DSU {
+    vector<int> root;
+    vector<int> sz;
+public:
+    int find(int x) {
+        if (root[x] != x) root[x] = find(root[x]);
+        return root[x];
+    }
+    void join(int x, int y) {
+        x = find(x);
+        y = find(y);
+        if (x == y) return;
+        if (sz[x] > sz[y]) swap(x, y);
+        root[x] = y;
+        sz[y] += sz[x];
+        sz[x] = 0;
+    }
+    DSU(int n) {
+        root = vector<int>(n+1);
+        sz = vector<int>(n+1);
+        iota(root.begin(), root.end(), 0);
+        sz.assign(n+1,0);
+    }
+};
+
 void solve()
 {
-    
+    int n;
+    cin >> n;
+    DSU dsu(n);
+    trace(dsu.find(1));
+    dsu.join(1,2);
+    trace(dsu.find(1),dsu.find(2));
 }
 
 signed main()
